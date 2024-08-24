@@ -59,6 +59,8 @@ function Home() {
   const fetchExchangeRates = useCallback(() => {
     if (!fromCurrency || !toCurrency) return;
 
+    setError(null);
+
     const fromCurrencyCode = fromCurrency.currencyCode;
     const toCurrencyCode = toCurrency.currencyCode;
 
@@ -78,6 +80,13 @@ function Home() {
           { method: "get" }
         );
         const results = await res.json();
+
+        if (res.status === 200 && results.Information) {
+          setError(results.Information);
+          setLoading(false);
+          return;
+        }
+
         const newData = Object.entries(
           results["Time Series FX (Daily)"]
         ) as ExchangeRate[];
@@ -268,26 +277,27 @@ function Home() {
               </tbody>
             )}
           </table>
-          {loading ||
-            (error && (
-              <div className="flex justify-center items-center mb-60 mt-60">
-                {loading && <CircleLoading />}
-                {error && (
-                  <h4 className="text-2xl text-red-800">
-                    Somthing went wrong, Please try again.{" "}
-                    <a
-                      className="text-blue-600 cursor-pointer"
-                      onClick={() => {
-                        fetchExchangeRates();
-                        setError(null);
-                      }}
-                    >
-                      Try again.
-                    </a>
-                  </h4>
-                )}
-              </div>
-            ))}
+          {(loading || error) && (
+            <div className="flex justify-center items-center mb-60 mt-60">
+              {loading && <CircleLoading />}
+              {error && (
+                <h4 className="text-2xl text-red-800">
+                  {error.length > 3
+                    ? error
+                    : "Somthing went wrong, Please try again"}
+                  .
+                  <a
+                    className="text-blue-600 cursor-pointer"
+                    onClick={() => {
+                      fetchExchangeRates();
+                    }}
+                  >
+                    Try again.
+                  </a>
+                </h4>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </Layout>
