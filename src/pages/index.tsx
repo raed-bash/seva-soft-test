@@ -109,7 +109,7 @@ function Home() {
     fetchExchangeRate();
   }, [startDate, endDate, setCashingExchangeRates]);
 
-  const fetchExchangeRatesDebounce = useDebounce(fetchExchangeRates);
+  const fetchExchangeRatesDebounce = useDebounce(fetchExchangeRates, 1000);
 
   useEffect(() => {
     if (!fromCurrency || !toCurrency) return;
