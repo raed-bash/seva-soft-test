@@ -5,7 +5,16 @@
 .input-theme {
   @apply mt-1 block w-full p-2 border border-gray-300 rounded-md;
 }
+.th_td-theme {
+  @apply border-gray-300 py-2 px-4;
+}
 
 input {
   @apply input-theme;
+}
+th {
+  @apply th_td-theme border-b-2;
+}
+td {
+  @apply th_td-theme border-b;
 }
